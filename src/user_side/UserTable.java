@@ -18,25 +18,35 @@ public class UserTable {
 	}
 	
 	
-	/** Print All Users **/
-	static void printUsers() {
-		for(User user : users) {
-			// if index is not null
-			if(user != null) {
-				// print all users in the tree at current index
-				printTree(user);
+	/** Load All The Users From "Users.csv" File Into The HashTable Data Structure **/
+	static void loadUsers() {
+		try {
+			FileReader fr = new FileReader("Users.csv");
+			Scanner inFile = new Scanner(fr);
+			while (inFile.hasNext()) {
+				// Read the next line.
+				String row = inFile.nextLine();
+				// split the line and store the individual fields of the row in an array.
+				// Index : Value
+				// 0 : name (String)
+				// 1 : username (String)
+				// 2 : password (String)
+				// 3 : email (String)
+				// 4 : phoneNumber (String)
+				String[] fields = row.split(",");
+				User user = new User(fields[0], fields[1], fields[2], fields[3], fields[4]);
+				addUser(user);
 			}
+			inFile.close();
+		} catch (IOException e) {
+			System.out.println("Error");
+			e.printStackTrace();
 		}
+
 	}
 	
 	
-	/** Print All Users In A Tree **/
-	private static void printTree(User root) {
-		if(root == null) return;
-		printTree(root.left);
-		System.out.printf("%s	%s	 %s	  %s   %s%n", root.name, root.username, root.password, root.email, root.phoneNumber);
-		printTree(root.right);
-	}
+	
 
 	
 	/** Add User To BST Tree **/
@@ -108,6 +118,17 @@ public class UserTable {
 			root = root.right;
 		return root;
 	}
+	
+	
+	/** Remove A User **/
+	static void removeUser(String username) {
+		// get key for the user
+		int key = hash(username);
+		// remove the user from tree at key index
+		users[key] = removeUser(users[key], username);
+		// remove the user from "Users.csv" file 
+		deleteFromFile(username);
+	}
 
 	
 	/** Remove A User From Tree **/
@@ -145,24 +166,20 @@ public class UserTable {
 	}
 
 	
-	/**
-	 * Save The User Record In The "Users.csv" File Upon Signup And Add To Hash
-	 * Table
-	 **/
-	static void saveNewUser(User newUser) {
+	/** Remove User From Users.csv File **/
+	private static void deleteFromFile(String username) {
 		try {
-			FileWriter fw = new FileWriter("Users.csv", true);
-			PrintWriter out = new PrintWriter(fw);
-			// Write the record with "," as a delimiter.
-			out.println(newUser.name + "," + newUser.username + "," + newUser.password + "," + newUser.email + ","
-					+ newUser.phoneNumber);
+			String updatedContent = getUpdatedFileString(username);
+			PrintWriter out = new PrintWriter("Users.csv");
+			out.println(updatedContent);
 			out.close();
-			addUser(newUser);
 		} catch (IOException e) {
 			System.out.println("Error");
 			e.printStackTrace();
 		}
+		
 	}
+	
 	
 	/** Get Updated Content Of File After Removing The Record Of 'username' **/
 	private static String getUpdatedFileString(String username) {
@@ -190,32 +207,6 @@ public class UserTable {
 		return fileContent;
 	}
 
-	
-	/** Remove User From Users.csv File **/
-	private static void deleteFromFile(String username) {
-		try {
-			String updatedContent = getUpdatedFileString(username);
-			PrintWriter out = new PrintWriter("Users.csv");
-			out.println(updatedContent);
-			out.close();
-		} catch (IOException e) {
-			System.out.println("Error");
-			e.printStackTrace();
-		}
-		
-	}
-	
-	
-	/** Remove A User **/
-	static void removeUser(String username) {
-		// get key for the user
-		int key = hash(username);
-		// remove the user from tree at key index
-		users[key] = removeUser(users[key], username);
-		// remove the user from "Users.csv" file 
-		deleteFromFile(username);
-	}
-	
 	
 	/** Update Item Name in "items_data.csv" using an item id **/
 	static void updateItem(int id, String newName) {
@@ -256,34 +247,46 @@ public class UserTable {
 		}
 		
 	}
-
 	
-	/** Load All The Users From "Users.csv" File Into The HashTable Data Structure **/
-	static void loadUsers() {
+	
+	/**
+	 * Save The User Record In The "Users.csv" File Upon Signup And Add To Hash
+	 * Table
+	 **/
+	static void saveNewUser(User newUser) {
 		try {
-			FileReader fr = new FileReader("Users.csv");
-			Scanner inFile = new Scanner(fr);
-			while (inFile.hasNext()) {
-				// Read the next line.
-				String row = inFile.nextLine();
-				// split the line and store the individual fields of the row in an array.
-				// Index : Value
-				// 0 : name (String)
-				// 1 : username (String)
-				// 2 : password (String)
-				// 3 : email (String)
-				// 4 : phoneNumber (String)
-				String[] fields = row.split(",");
-				User user = new User(fields[0], fields[1], fields[2], fields[3], fields[4]);
-				// get key for the user
-				addUser(user);
-			}
-			inFile.close();
+			FileWriter fw = new FileWriter("Users.csv", true);
+			PrintWriter out = new PrintWriter(fw);
+			// Write the record with "," as a delimiter.
+			out.println(newUser.name + "," + newUser.username + "," + newUser.password + "," + newUser.email + ","
+					+ newUser.phoneNumber);
+			out.close();
+			addUser(newUser);
 		} catch (IOException e) {
 			System.out.println("Error");
 			e.printStackTrace();
 		}
-
 	}
-
+	
+	
+	/** Print All Users **/
+	static void printUsers() {
+		for(User user : users) {
+			// if index is not null
+			if(user != null) {
+				// print all users in the tree at current index
+				printTree(user);
+			}
+		}
+	}
+	
+	
+	/** Print All Users In A Tree **/
+	private static void printTree(User root) {
+		if(root == null) return;
+		printTree(root.left);
+		System.out.printf("%s	%s	 %s	  %s   %s%n", root.name, root.username, root.password, root.email, root.phoneNumber);
+		printTree(root.right);
+	}
+	
 }

@@ -9,7 +9,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Order {
-
 	// Order Details
 	private OrderDetails orderDetails;
 	// Order Status : EITHER  0(PENDING), 1(ACCEPTED) OR 2(DELIVERED)

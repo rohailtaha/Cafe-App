@@ -12,7 +12,6 @@ public class Cart {
 	double totalCost = 0;
 	
 	
-	/** Cart Constructor **/
 	Cart(int cafeID) {
 		root_cartItem = tail_cartItem = null;
 		totalCost = 0;
@@ -20,7 +19,6 @@ public class Cart {
 	}
 	
 	
-	/** Add Item To Cart **/
 	void addItem(CartItem cartItem) {
 		// Add the cost of current cart item to total cost.
 		this.totalCost += cartItem.totalCost;
@@ -33,17 +31,6 @@ public class Cart {
 	}
 	
 	
-//	/** Function That Initializes A CartItem Using A FoodItem. **/
-//	void addItem(FoodItem foodItem) {
-//		System.out.println("Enter number of " + foodItem.name + " you want to order: ");
-//		Scanner sc = new Scanner(System.in);
-//		int quantity = sc.nextInt();
-//		CartItem cartItem = new CartItem(foodItem.id, foodItem.name, foodItem.cost, quantity);
-//		addItem(cartItem);
-//	}
-	
-	
-	/** Remove A CartItem With An ID **/
 	void removeItem(int id) {
 		CartItem temp = root_cartItem;
 		CartItem prev = root_cartItem;

@@ -27,8 +27,6 @@ public class OrderDetails {
 		this.phoneNumber = phoneNumber;
 		this.address = address;
 		this.root_OrderedItems = root_CartItem;
-		
-		PastOrder pastOrder = new PastOrder(this.orderId, this.orderTime, this.cafeID, this.address, this.totalCost,
-				"0");
+
 	}
 }

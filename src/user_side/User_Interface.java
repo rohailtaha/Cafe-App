@@ -10,14 +10,14 @@ public class User_Interface {
 	private static Cart cart;
 
 	static void display() {
-		while (!authenticate()) {
-			System.out.println("Invalid Login\n");
-		}
-		System.out.println("You are Logged In");
+//		while (!authenticate()) {
+//			System.out.println("Invalid Login\n");
+//		}
+//		System.out.println("You are Logged In");
+		user = UserTable.getUser("usman77", "huabc");
 		showMainMenu();
 	}
 
-	
 	/**
 	 * Login The User.
 	 * 
@@ -65,10 +65,7 @@ public class User_Interface {
 		int choice = Integer.parseInt(sc.nextLine());
 		if (choice == 1) {
 			user = login();
-			if (user == null) {
-				return false;
-			}
-			return true;
+			return user == null ? false : true;
 		} else if (choice == 2) {
 			user = signUp();
 			return true;
@@ -78,31 +75,42 @@ public class User_Interface {
 		}
 	}
 
+	
+	private static boolean isCartEmpty() {
+		return cart == null || cart.isEmpty();
+	}
+
+	
 	static void showMainMenu() {
-		Scanner sc = new Scanner(System.in);
 		System.out.printf(
 				"\nPress 1: Add items to cart%nPress 2: View your cart%nPress 3: Remove items from cart%nPress 4: Empty cart%n");
 		System.out.printf("Press 5: View status of orders%n");
-		if (cart != null && !cart.isEmpty()) {
+		if (!isCartEmpty()) {
 			System.out.printf("Press 6: ** CONFIRM ORDER **%n");
 		}
-		int option = sc.nextInt();
-		switch (option) {
+		detectActions();
+	}
+
+	private static void detectActions() {
+		Scanner sc = new Scanner(System.in);
+		switch (sc.nextInt()) {
 		case 1:
 			showCafes();
 			break;
 		case 2:
-			showViewCartUI();
+			showCart();
+			showMainMenu();
 			break;
 		case 3:
 			showRemoveItemsUI();
+			showMainMenu();
 			break;
 		case 4:
-			showEmptyCartUI();
+			emptyCart();
+			showMainMenu();
 			break;
 		case 5:
-			PastOrders pastOrders = user.getPastOrders();
-			pastOrders.print();
+			user.getPastOrders().print();			
 			showMainMenu();
 			break;
 		case 6:
@@ -114,87 +122,47 @@ public class User_Interface {
 					orderDetails.address, orderDetails.totalCost, "0");
 			pastOrder.addItems(cart.getCartItemList());
 			cart.empty();
-			PastOrders pastOrders_ = user.getPastOrders();
-			pastOrders_.add(pastOrder);
+			PastOrders pastOrders = user.getPastOrders();
+			pastOrders.add(pastOrder);
 			showMainMenu();
 			break;
 		default:
-			System.out.print("Invalid Input");
+			System.out.println("Invalid Input");
 			showMainMenu();
 			break;
 		}
 	}
 
-	/** UI When User Wants To View Cart Items **/
-	private static void showViewCartUI() {
-		if (cart == null || cart.isEmpty()) {
-			System.out.println("Cart is Empty.");
-		} else {
-			cart.printItems();
-		}
-		showMainMenu();
-	}
-
-	/** UI When User Wants To Empty Cart **/
-	private static void showEmptyCartUI() {
-		if (cart == null || cart.isEmpty()) {
-			System.out.println("Cart is already empty.");
-		} else {
-			cart.empty();
-			System.out.println("Cart is now empty");
-		}
-		showMainMenu();
-	}
-
-	/** UI When User Wants To Remove An Item From Cart **/
-	private static void showRemoveItemsUI() {
-		if (cart == null || cart.isEmpty()) {
-			System.out.println("Cart is Empty");
-			showMainMenu();
-		} else {
-			Scanner sc = new Scanner(System.in);
-			sc = new Scanner(System.in);
-			System.out.println("Enter Item Id to remove\n(-1 to go back)");
-			int itemID = sc.nextInt();
-			if (itemID == -1) {
-				showMainMenu();
-				return;
-			}
-			if (cart.hasItem(itemID)) {
-				cart.removeItem(itemID);
-				System.out.println("Item Removed From Cart\n");
-			} else {
-				System.out.println("No item with id " + itemID + " is in the cart.");
-			}
-			showRemoveItemsUI();
-		}
-	}
-
+	
 	private static void showCafes() {
 		System.out.println("\nSelect a cafe to view menu:");
-		Scanner sc = new Scanner(System.in);
 		System.out.printf("Press 1: Cafe1%nPress 2: Cafe2%nPress 3: Cafe3%nPress 4: Cafe4%nPress 5: Cafe5%n"
 				+ "(-1 to go back)%n");
-		int option = sc.nextInt();
-		switch (option) {
+		detectCafeChoice();
+	}
+
+	
+	private static void detectCafeChoice() {
+		Scanner sc = new Scanner(System.in);
+		switch (sc.nextInt()) {
 		case 1:
-			showMenu(3224);
+			showCafeMenu(3224);
 			askForOrder(3224);
 			break;
 		case 2:
-			showMenu(2209);
+			showCafeMenu(2209);
 			askForOrder(2209);
 			break;
 		case 3:
-			showMenu(3256);
+			showCafeMenu(3256);
 			askForOrder(3256);
 			break;
 		case 4:
-			showMenu(5543);
+			showCafeMenu(5543);
 			askForOrder(5543);
 			break;
 		case 5:
-			showMenu(7658);
+			showCafeMenu(7658);
 			askForOrder(7658);
 			break;
 		case -1:
@@ -207,28 +175,24 @@ public class User_Interface {
 		}
 	}
 
+	
 	/** Show Menu of A Cafe Whose ID Is Passed As Parameter **/
-	static void showMenu(int cafeID) {
+	static void showCafeMenu(int cafeID) {
+		System.out.println("\nMenu:");
+		System.out.printf("%-12s%-34s%6s%n", "Item ID", "Item Name", "Cost");
+		readItems(cafeID);
+	}
+
+	
+	private static void readItems(int cafeID) {
 		try {
-			System.out.println("\nMenu:");
-			System.out.printf("%-12s%-34s%6s%n", "Item ID", "Item Name", "Cost");
 			FileReader fr = new FileReader("items_data.csv");
 			Scanner inFile = new Scanner(fr);
 			while (inFile.hasNext()) {
-				// Read the next line.
-				String row = inFile.nextLine();
-				// split the line and store the individual fields of the row in an array.
-				// Index : Value
-				// 0 : itemId (int)
-				// 1 : Item Name (String)
-				// 2 : amount (String)
-				// 3 : cost (double)
-				// 4 : cafeID (int)
-				String[] fields = row.split(",");
+				String record = inFile.nextLine();
 				// if cafeId matches, only then display.
-				if (Integer.parseInt(fields[4]) == cafeID) {
-					System.out.printf("%-12s%-34s%6s%n", fields[0], fields[1] + " " + fields[2], fields[3]);
-				}
+				if(isCafeItem(cafeID, record))
+					printItem(record);
 			}
 			inFile.close();
 			System.out.println();
@@ -237,29 +201,59 @@ public class User_Interface {
 			e.printStackTrace();
 		}
 	}
-
+	
+	
+	private static boolean isCafeItem(int cafeID, String record) {
+		// split the line into individual fields of the row in an array.
+		// Index : Value
+		// 4 : cafeID (int)
+		return Integer.parseInt(record.split(",")[4]) == cafeID;
+	}
+	
+	
+	private static void printItem(String record) {
+		String[] fields = record.split(",");
+		// Index : Value
+		// 0 : itemId (int)
+		// 1 : Item Name (String)
+		// 2 : amount (String)
+		// 3 : cost (double)
+		System.out.printf("%-12s%-34s%6s%n", fields[0], fields[1] + " " + fields[2], fields[3]);
+	}
+	
+	
 	/** Ask The User To Add Items To Cart For Order **/
-	static private void askForOrder(int cafeId) {
+	static private void askForOrder(int cafeID) {
 		System.out.println("Enter Item ID's to add to cart\n(-1 to go back)");
 		Scanner sc = new Scanner(System.in);
-		String line = sc.nextLine();
-		String[] ids = line.split(" ");
+		String[] ids = sc.nextLine().split(" ");
 		if (ids[0].equals("-1")) {
 			showCafes();
 			return;
 		}
+		addItemsToCart(ids, cafeID);
+	}
+	
+	
+	private static void addItemsToCart(String ids[], int cafeID) {
 		try {
-			cart = new Cart(cafeId);
+			// Initialize the cart
+			cart = new Cart(cafeID);
 			for (String id : ids) {
 				FileReader fr = new FileReader("items_data.csv");
 				Scanner inFile = new Scanner(fr);
 				while (inFile.hasNext()) {
-					String row = inFile.nextLine();
-					String[] fields = row.split(",");
-					if (Integer.parseInt(fields[0]) == Integer.parseInt(id) && Integer.parseInt(fields[4]) == cafeId) {
-						int quantity = getQuantity(fields[1] + " " + fields[2]);
+					String[] fields = inFile.nextLine().split(",");
+					// Index : Value
+					// 0 : itemId (int)
+					// 1 : Item Name (String)
+					// 2 : amount (String)
+					// 3 : cost (double)
+					// 4 : cafeID (int)
+					if (Integer.parseInt(fields[0]) == Integer.parseInt(id) && Integer.parseInt(fields[4]) == cafeID) {
+						
 						CartItem cartItem = new CartItem(Integer.parseInt(fields[0]), fields[1] + " " + fields[2],
-								Double.parseDouble(fields[3]), quantity);
+								Double.parseDouble(fields[3]), getQuantity(fields[1] + " " + fields[2]));
 						cart.addItem(cartItem);
 						break;
 					}
@@ -273,6 +267,50 @@ public class User_Interface {
 			e.printStackTrace();
 		}
 	}
+	
+
+	private static void showCart() {
+		if (isCartEmpty()) System.out.println("Cart is Empty.");
+		else cart.printItems();
+	}
+
+	
+	/** UI When User Wants To Empty Cart **/
+	private static void emptyCart() {
+		if (isCartEmpty()) {
+			System.out.println("Cart is already empty.");
+		} else {
+			cart.empty();
+			System.out.println("Cart is now empty");
+		}
+	}
+
+	
+	/** UI When User Wants To Remove An Item From Cart **/
+	private static void showRemoveItemsUI() {
+		if (isCartEmpty()) {
+			System.out.println("Cart is Empty");
+		} else {
+			System.out.println("Enter Item Id to remove\n(-1 to go back)");
+			Scanner sc = new Scanner(System.in);
+			removeCartItem(sc.nextInt());
+		}
+	}
+	
+	
+	private static void removeCartItem(int itemID) {
+		if (itemID == -1) {
+			return;
+		}
+		if (cart.hasItem(itemID)) {
+			cart.removeItem(itemID);
+			System.out.println("Item Removed From Cart\n");
+		} else {
+			System.out.println("No item with id " + itemID + " is in the cart.");
+		}
+		showRemoveItemsUI();
+	}
+	
 
 	/**
 	 * Ask The Quantity Of A CartItem To Be Ordered
@@ -281,8 +319,8 @@ public class User_Interface {
 	 **/
 	static private int getQuantity(String itemName) {
 		System.out.print("Enter Quantity for " + itemName + ": ");
-		Scanner sc = new Scanner(System.in);
-		return sc.nextInt();
+		
+		return new Scanner(System.in).nextInt();
 	}
 
 	static void printOrderDetails(OrderDetails orderDetails) {
