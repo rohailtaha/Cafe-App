@@ -14,7 +14,7 @@ public class User_Interface {
 //			System.out.println("Invalid Login\n");
 //		}
 //		System.out.println("You are Logged In");
-		user = UserTable.getUser("usman77", "huabc");
+		user = UserTable.getUser("nasir77", "nmabc");
 		showMainMenu();
 	}
 
@@ -124,12 +124,6 @@ public class User_Interface {
 		}
 	}
 	
-	
-	private static void confirmOrder() {
-		Order order = new Order(cart, user);
-		cart.empty();
-	}
-
 	
 	private static void showCafes() {
 		System.out.println("\nSelect a cafe to view menu:");
@@ -265,7 +259,20 @@ public class User_Interface {
 		}
 	}
 	
+	
+	static private int getQuantity(String itemName) {
+		System.out.print("Enter Quantity for " + itemName + ": ");
+		return new Scanner(System.in).nextInt();
+	}
+	
+	
+	private static void confirmOrder() {
+		Order order = new Order(cart, user);
+		order.giveConfirmation();
+		cart.empty();
+	}
 
+	
 	private static void showCart() {
 		if (isCartEmpty()) System.out.println("Cart is Empty.");
 		else cart.printItems();
@@ -278,7 +285,7 @@ public class User_Interface {
 			System.out.println("Cart is already empty.");
 		} else {
 			cart.empty();
-			System.out.println("Cart is now empty");
+			System.out.println("Cart is now empty.");
 		}
 	}
 
@@ -286,7 +293,7 @@ public class User_Interface {
 	/** UI When User Wants To Remove An Item From Cart **/
 	private static void showRemoveItemsUI() {
 		if (isCartEmpty()) {
-			System.out.println("Cart is Empty");
+			System.out.println("Cart is Empty.");
 		} else {
 			System.out.println("Enter Item Id to remove\n(-1 to go back)");
 			Scanner sc = new Scanner(System.in);
@@ -308,17 +315,6 @@ public class User_Interface {
 		showRemoveItemsUI();
 	}
 	
-
-	/**
-	 * Ask The Quantity Of A CartItem To Be Ordered
-	 * 
-	 * @return: Quantity
-	 **/
-	static private int getQuantity(String itemName) {
-		System.out.print("Enter Quantity for " + itemName + ": ");
-		
-		return new Scanner(System.in).nextInt();
-	}
 
 	static void printOrderDetails(OrderDetails orderDetails) {
 		System.out.println("Order ID: " + orderDetails.orderId);

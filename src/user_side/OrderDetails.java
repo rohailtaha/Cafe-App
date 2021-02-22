@@ -1,13 +1,10 @@
 package user_side;
 
-import java.time.LocalDateTime;
 
 public class OrderDetails {
 	String orderId;
 	int cafeID;
-	// Total Cost Of The Order
-	double totalCost;	
-	// Time At Which Order Was Made
+	double totalCost;
 	String orderTime;
 	String username;
 	String phoneNumber;
@@ -16,9 +13,8 @@ public class OrderDetails {
 	// List Of All Ordered Items(CartItems)
 	CartItem root_OrderedItems;
 
-	// Construct Order Details
-	public OrderDetails(String orderId, int cafeID, double totalCost, String orderTime, String username, String phoneNumber, String address,
-			CartItem root_CartItem) {
+	public OrderDetails(String orderId, int cafeID, double totalCost, String orderTime, String username,
+			String phoneNumber, String address, CartItem root_CartItem) {
 		this.orderId = orderId;
 		this.cafeID = cafeID;
 		this.totalCost = totalCost;

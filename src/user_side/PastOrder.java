@@ -6,18 +6,16 @@ import java.util.Scanner;
 
 /** A Node In The PastOrders List **/
 public class PastOrder {
-	// KEY : Time At Which Order Was Made
 	String orderTime;
 	String orderStatus;
 	String orderId;
 	int cafeID;
-	// Total Cost Of The Order
 	double totalCost;
 	// Delivery Address
 	String address;
-	// left child
+	// next PastOrder
 	PastOrder next;
-	// List Of All Ordered Items(CartItems)
+	// List Of All Ordered Items(CartItems) For This PastOrder
 	private CartItem root_OrderedItems;
 	private CartItem tail_orderedItems;
 

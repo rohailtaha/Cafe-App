@@ -21,7 +21,7 @@ public class CommonFunctionalities {
         return sum;
 	}
 
-	static String getId2() {
+	static String getId() {
 		String uniqueKey = UUID.randomUUID().toString().replace("-", "").substring(20, 32);
 		return uniqueKey;
 	}

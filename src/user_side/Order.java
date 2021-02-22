@@ -9,11 +9,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Order {
-	// Order Details
 	private OrderDetails orderDetails;
 	// Order Status : EITHER  0(PENDING), 1(ACCEPTED) OR 2(DELIVERED)
 	private int orderStatus;
-	String orderID;
+	private final String orderID;
 
 	
 	/** Construct Order **/
@@ -23,12 +22,12 @@ public class Order {
 		// Format the current date in format specified above
 		String orderTime = date_time_formatter.format(LocalDateTime.now());
 		// Get a unique order ID
-		this.orderID = CommonFunctionalities.getId2();
+		this.orderID = CommonFunctionalities.getId();
+		this.orderStatus = 0;
 		
 		this.orderDetails = new OrderDetails(this.orderID, cart.cafeID, cart.totalCost, orderTime, user.username,
 				user.phoneNumber, this.getAddress(), cart.getCartItemList());
 		// set order status to pending
-		this.orderStatus = 0;
 		addAsPastOrder(cart, user);
 		this.saveOrderDetails();
 	}
@@ -86,6 +85,11 @@ public class Order {
 			System.out.println("Error");
 			e.printStackTrace();
 		}
+	}
+	
+	
+	void giveConfirmation() {
+		System.out.println("Your Order is confirmed and will be delivered soon. Thanks for purchasing.");
 	}
 	
 	
