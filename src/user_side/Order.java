@@ -19,26 +19,38 @@ public class Order {
 	/** Construct Order **/
 	Order(Cart cart, User user) {
 		// To format the date in specific format
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-		// Get the current date
-		LocalDateTime now = LocalDateTime.now();
+		DateTimeFormatter date_time_formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 		// Format the current date in format specified above
-		String orderTime = dtf.format(now);
+		String orderTime = date_time_formatter.format(LocalDateTime.now());
 		// Get a unique order ID
 		this.orderID = CommonFunctionalities.getId2();
-		System.out.printf("Enter Address Of Delivery: ");
-		Scanner s = new Scanner(System.in);
-		// Get address of delivery
-		String address = s.nextLine();
-		this.orderDetails = new OrderDetails(orderID, cart.cafeID, cart.totalCost, orderTime, user.username,
-				user.phoneNumber, address, cart.getCartItemList());
+		
+		this.orderDetails = new OrderDetails(this.orderID, cart.cafeID, cart.totalCost, orderTime, user.username,
+				user.phoneNumber, this.getAddress(), cart.getCartItemList());
 		// set order status to pending
 		this.orderStatus = 0;
+		addAsPastOrder(cart, user);
+		this.saveOrderDetails();
 	}
 
 	
+	private String getAddress() {
+		System.out.printf("Enter Address Of Delivery: ");
+		return new Scanner(System.in).nextLine();
+	}
+	
+	
+	private void addAsPastOrder(Cart cart, User user) {
+		// save the order as a past order
+		PastOrder pastOrder = new PastOrder(this.orderDetails.orderId, this.orderDetails.orderTime, this.orderDetails.cafeID,
+				this.orderDetails.address, this.orderDetails.totalCost, "0");
+		pastOrder.addItems(cart.getCartItemList());
+		user.getPastOrders().add(pastOrder);
+	}
+	
+	
 	/** Save The Order Details In The "orderDetails.csv" File **/
-	void saveOrderDetails() {
+	private void saveOrderDetails() {
 		try {
 			FileWriter fw = new FileWriter("orderDetails.csv", true);
 			PrintWriter out = new PrintWriter(fw);

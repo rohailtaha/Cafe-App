@@ -114,16 +114,7 @@ public class User_Interface {
 			showMainMenu();
 			break;
 		case 6:
-			Order order = new Order(cart, user);
-			order.saveOrderDetails();
-			// save the order as a past order
-			OrderDetails orderDetails = order.getOrderDetails();
-			PastOrder pastOrder = new PastOrder(orderDetails.orderId, orderDetails.orderTime, orderDetails.cafeID,
-					orderDetails.address, orderDetails.totalCost, "0");
-			pastOrder.addItems(cart.getCartItemList());
-			cart.empty();
-			PastOrders pastOrders = user.getPastOrders();
-			pastOrders.add(pastOrder);
+			confirmOrder();
 			showMainMenu();
 			break;
 		default:
@@ -131,6 +122,12 @@ public class User_Interface {
 			showMainMenu();
 			break;
 		}
+	}
+	
+	
+	private static void confirmOrder() {
+		Order order = new Order(cart, user);
+		cart.empty();
 	}
 
 	
