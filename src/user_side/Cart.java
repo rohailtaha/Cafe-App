@@ -34,12 +34,14 @@ public class Cart {
 			System.out.println("Cart is empty.");
 			return;
 		}
+		
 		CartItem temp = root_cartItem;
 		CartItem prev = root_cartItem;
 		while (temp != null && temp.itemID != id) {
 			prev = temp;
 			temp = temp.next;
 		}
+		
 		prev.next = temp.next;
 		// If only one item in cart
 		if (temp == tail_cartItem && temp == root_cartItem)
@@ -52,21 +54,20 @@ public class Cart {
 			tail_cartItem = prev;
 	}
 
-	/** Print All Items Added To Cart **/
 	void printItems() {
 		// If cart is empty
 		if (isEmpty()) {
-			System.out.println("Cart is Empty.");
+			System.out.println("Cart is empty.");
 		}
-		CartItem temp = root_cartItem;
 		System.out.printf("%-9s%-35s%-17s%12s%n", "Item ID", "Item Name", "Quantity Ordered", "Total Cost");
+		CartItem temp = root_cartItem;
 		while (temp != null) {
 			System.out.printf("%-9d%-35s%-17d%12.1f%n", temp.itemID, temp.name, temp.quantity, temp.totalCost);
 			temp = temp.next;
 		}
 	}
 
-	/** Check If An Item Exists In Cart Whose ID Is Passed As Parameter **/
+	
 	boolean hasItem(int itemID) {
 		if (isEmpty()) {
 			return false;
@@ -78,18 +79,19 @@ public class Cart {
 		return temp == null ? false : true;
 	}
 
+	
 	/** Get The List Of All CartItem's **/
 	CartItem getCartItemList() {
-		return root_cartItem;
+		return this.root_cartItem;
 	}
 
-	/** Checks If The Cart Is Empty **/
+	
 	boolean isEmpty() {
-		return root_cartItem == null;
+		return this.root_cartItem == null;
 	}
 
-	/** Empty Cart **/
+	
 	void empty() {
-		root_cartItem = tail_cartItem = null;
+		this.root_cartItem = this.tail_cartItem = null;
 	}
 }

@@ -14,7 +14,7 @@ public class User_Interface {
 //			System.out.println("Invalid Login\n");
 //		}
 //		System.out.println("You are Logged In");
-		user = UserTable.getUser("nasir77", "nmabc");
+		user = UserTable.getUser("Raffay77", "arabc");
 		showMainMenu();
 	}
 
@@ -63,16 +63,27 @@ public class User_Interface {
 		System.out.println("Press 2: Signup");
 		Scanner sc = new Scanner(System.in);
 		int choice = Integer.parseInt(sc.nextLine());
-		if (choice == 1) {
+		
+		switch(choice) {
+		case 1:
 			user = login();
 			return user == null ? false : true;
-		} else if (choice == 2) {
+		case 2:
 			user = signUp();
 			return true;
-		} else {
-			// On invalid input
+		default:
 			return false;
+			
 		}
+//		if (choice == 1) {
+//			user = login();
+//			return user == null ? false : true;
+//		} else if (choice == 2) {
+//			
+//		} else {
+//			// On invalid input
+//			
+//		}
 	}
 
 	

@@ -4,26 +4,24 @@ public class CartItem {
 	int itemID;
 	String name;
 	int quantity;
+	// Total Cost Calculated By Multiplying Quantity With Cost of One Item
 	double totalCost;
-	// Next CartItem In Linked List For Cart
+	// Next CartItem
 	CartItem next;
 
-	// CartItem Constructor
 	CartItem(int id, String name, double cost, int quantity) {
 		this.itemID = id;
 		this.name = name;
 		this.quantity = quantity;
-		// Calculate total cost by multiplying quantity with cost of one item
+		
 		this.totalCost = quantity * cost;
 		this.next = null;
 	}
 
-	// CartItem Constructor
 	CartItem(int id, String name, int quantity, double totalCost) {
 		this.itemID = id;
 		this.name = name;
 		this.quantity = quantity;
-		// Calculate total cost by multiplying quantity with cost of one item
 		this.totalCost = totalCost;
 		this.next = null;
 	}

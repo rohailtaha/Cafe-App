@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class PastOrder {
 	String orderTime;
 	String orderStatus;
-	String orderId;
+	String orderID;
 	int cafeID;
 	double totalCost;
 	// Delivery Address
@@ -22,7 +22,7 @@ public class PastOrder {
 	
 	public PastOrder(String orderId, String orderTime, int cafeID, String address, double totalCost, String orderStatus) {
 		this.orderTime = orderTime;
-		this.orderId = orderId;
+		this.orderID = orderId;
 		this.cafeID = cafeID;
 		this.totalCost = totalCost;
 		this.address = address;
@@ -31,7 +31,7 @@ public class PastOrder {
 
 	
 	/** Load All The Ordered Items Of A Particular Order **/
-	void loadOrderedItems(String orderId) {
+	void loadOrderedItems() {
 		try {
 			FileReader fr = new FileReader("orderedItems.csv");
 			Scanner inFile = new Scanner(fr);
@@ -46,7 +46,7 @@ public class PastOrder {
 				// 4 : totalCost (double)
 				String[] fields = row.split(",");
 				// if orderId matches
-				if (fields[0].equals(orderId)) {
+				if (fields[0].equals(this.orderID)) {
 					CartItem orderedItem = new CartItem(Integer.parseInt(fields[1]), fields[2],
 							Integer.parseInt(fields[3]), Double.parseDouble(fields[4]));
 					this.addItem(orderedItem);

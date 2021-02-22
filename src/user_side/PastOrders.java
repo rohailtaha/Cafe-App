@@ -42,7 +42,7 @@ public class PastOrders {
 				if (fields[2].equals(this.username)) {
 					PastOrder pastOrder = new PastOrder(fields[0], fields[5], Integer.parseInt(fields[1]), fields[4],
 							Double.parseDouble(fields[6]), fields[7]);
-					pastOrder.loadOrderedItems(fields[0]);
+					pastOrder.loadOrderedItems();
 					this.add(pastOrder);
 				}
 			}
@@ -71,7 +71,7 @@ public class PastOrders {
 		PastOrder temp = head;
 		while(temp!=null) {
 			System.out.printf("\nOrder ID: %-14sOrder Time: %-21sOrder Status: %-13sCost: %-9sDelivery Address: %s%n",
-					temp.orderId, temp.orderTime, temp.getOrderStatus(), temp.totalCost, temp.address);
+					temp.orderID, temp.orderTime, temp.getOrderStatus(), temp.totalCost, temp.address);
 			// print all ordered items for this order.
 			temp.printItems();
 			temp = temp.next;
