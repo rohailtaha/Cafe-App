@@ -52,6 +52,7 @@ public class Cart {
 		// If last item in list is to be deleted.
 		else if (temp == tail_cartItem)
 			tail_cartItem = prev;
+		this.totalCost -= temp.totalCost;
 	}
 
 	void printItems() {

@@ -76,7 +76,7 @@ public class PastOrder {
 	}
 
 	void printItems() {
-		CartItem temp = root_OrderedItems;
+		CartItem temp = this.root_OrderedItems;
 		System.out.println("Items Ordered:");
 		System.out.printf("%-35s%-10s%s%n", "Item Name", "Quantity", "Cost");
 		while (temp != null) {
@@ -85,7 +85,7 @@ public class PastOrder {
 		}
 	}
 	
-	String getOrderStatus() {
+	String getStatus() {
 		if(this.orderStatus.equals("0")) return "PENDING";
 		else if(this.orderStatus.equals("1")) return "ACCEPTED";
 		else return "DELIVERED";

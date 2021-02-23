@@ -64,7 +64,7 @@ public class UserTable {
 
 	
 	/** Add User **/
-	static void addUser(User newUser) {
+	private static void addUser(User newUser) {
 		int key = hash(newUser.username);
 		// if the key index is empty, make it the root
 		if (users[key] == null) {

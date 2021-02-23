@@ -4,17 +4,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class User_Interface {
+public class UserInterface {
 
 	private static User user;
 	private static Cart cart;
 
 	static void display() {
-//		while (!authenticate()) {
-//			System.out.println("Invalid Login\n");
-//		}
-//		System.out.println("You are Logged In");
-		user = UserTable.getUser("Raffay77", "arabc");
+		while (!authenticate()) {
+			System.out.println("Invalid Login\n");
+		}
+		System.out.println("You are Logged In");
 		showMainMenu();
 	}
 
@@ -33,8 +32,6 @@ public class User_Interface {
 	}
 
 	/**
-	 * Signup A New User
-	 * 
 	 * @return: The New User
 	 **/
 	private static User signUp() {
@@ -75,15 +72,6 @@ public class User_Interface {
 			return false;
 			
 		}
-//		if (choice == 1) {
-//			user = login();
-//			return user == null ? false : true;
-//		} else if (choice == 2) {
-//			
-//		} else {
-//			// On invalid input
-//			
-//		}
 	}
 
 	
