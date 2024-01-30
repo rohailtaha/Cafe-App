@@ -1,7 +1,7 @@
 # Cafe-App
 
 ## About the App
-This project was completed as a university semester project for the course data structures and algorithm. The project is written in Java.
+This project was completed as a semester project for the course data structures and algorithm. The project is written in Java.
 
 ## Features
 My task was to implement the user side of the cafe app with following functionalities:
